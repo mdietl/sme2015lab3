@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<trialForm>
+    <name>Spiegel</name>
+    <description></description>
+    <trialSpecific>false</trialSpecific>
+    <fillOnce>false</fillOnce>
+    <attributeGroup>
+        <name>Daten</name>
+        <secure>false</secure>
+        <sort>0</sort>
+        <attribute>
+            <name>Datum</name>
+            <recommended>true</recommended>
+            <sort>0</sort>
+            <formElement xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="datePicker">
+                <dataType>DATE</dataType>
+                <type>DATEPICKER</type>
+            </formElement>
+        </attribute>
+        <attribute>
+            <name>Lithium (mmol/l)</name>
+            <recommended>false</recommended>
+            <sort>1</sort>
+            <unit></unit>
+            <formElement xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="textField">
+                <dataType>DECIMAL</dataType>
+                <type>TEXTFIELD</type>
+                <constraints xsi:type="decimalConstraint">
+                    <constraintType>DECIMALCONSTRAINT</constraintType>
+                    <min>0.00</min>
+                    <max>1000.00</max>
+                </constraints>
+                <size>20</size>
+            </formElement>
+        </attribute>
+        <attribute>
+            <name>Oxcarbazepin (ug/ml)</name>
+            <recommended>false</recommended>
+            <sort>2</sort>
+            <unit></unit>
+            <formElement xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="textField">
+                <dataType>DECIMAL</dataType>
+                <type>TEXTFIELD</type>
+                <constraints xsi:type="decimalConstraint">
+                    <constraintType>DECIMALCONSTRAINT</constraintType>
+                    <min>0.00</min>
+                    <max>1000.00</max>
+                </constraints>
+                <size>20</size>
+            </formElement>
+        </attribute>
+        <attribute>
+            <name>Valproinsaeure (mcg/ml)</name>
+            <recommended>false</recommended>
+            <sort>3</sort>
+            <unit></unit>
+            <formElement xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="textField">
+                <dataType>DECIMAL</dataType>
+                <type>TEXTFIELD</type>
+                <constraints xsi:type="decimalConstraint">
+                    <constraintType>DECIMALCONSTRAINT</constraintType>
+                    <min>0.00</min>
+                    <max>1000.00</max>
+                </constraints>
+                <size>20</size>
+            </formElement>
+        </attribute>
+        <attribute>
+            <name>Carbamazepin (ug/ml)</name>
+            <recommended>false</recommended>
+            <sort>4</sort>
+            <unit></unit>
+            <formElement xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="textField">
+                <dataType>DECIMAL</dataType>
+                <type>TEXTFIELD</type>
+                <constraints xsi:type="decimalConstraint">
+                    <constraintType>DECIMALCONSTRAINT</constraintType>
+                    <min>0.00</min>
+                    <max>1000.00</max>
+                </constraints>
+                <size>20</size>
+            </formElement>
+        </attribute>
+        <attribute>
+            <name>Lamotrigin (ug/ml)</name>
+            <recommended>false</recommended>
+            <sort>5</sort>
+            <unit></unit>
+            <formElement xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="textField">
+                <dataType>DECIMAL</dataType>
+                <type>TEXTFIELD</type>
+                <constraints xsi:type="decimalConstraint">
+                    <constraintType>DECIMALCONSTRAINT</constraintType>
+                    <min>0.00</min>
+                    <max>1000.00</max>
+                </constraints>
+                <size>20</size>
+            </formElement>
+        </attribute>
+        <attribute>
+            <name>Phenytoin (mcg/ml)</name>
+            <recommended>false</recommended>
+            <sort>6</sort>
+            <unit></unit>
+            <formElement xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="textField">
+                <dataType>DECIMAL</dataType>
+                <type>TEXTFIELD</type>
+                <constraints xsi:type="decimalConstraint">
+                    <constraintType>DECIMALCONSTRAINT</constraintType>
+                    <min>0.00</min>
+                    <max>1000.00</max>
+                </constraints>
+                <size>20</size>
+            </formElement>
+        </attribute>
+        <attribute>
+            <name>Bemerkung</name>
+            <recommended>false</recommended>
+            <sort>7</sort>
+            <unit></unit>
+            <formElement xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="textArea">
+                <dataType>LONGSTR</dataType>
+                <type>TEXTAREA</type>
+                <size>300</size>
+            </formElement>
+        </attribute>
+    </attributeGroup>
+</trialForm>

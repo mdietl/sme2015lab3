@@ -1,0 +1,8 @@
+changes:
+
+1. ParticipationManagerBean:52 -> changed scope to Page for @DataModel annotation
+
+2. message_en.properties, message_de.properties -> added new property nopatients6.info
+viewPatients.xhtml:40 -> changed message key to #{messages['nopatients6.info']}
+
+3. UserDAO:78 -> changed query
