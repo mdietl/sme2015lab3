@@ -7,11 +7,19 @@
 <datasources>
    
    <local-tx-datasource>
-      <jndi-name>SPICSwoundDatasource</jndi-name>
+      <!--  <jndi-name>SPICSwoundDatasource</jndi-name>
       <connection-url>jdbc:hsqldb:.</connection-url>
       <driver-class>org.hsqldb.jdbcDriver</driver-class>
       <user-name>sa</user-name>
-      <password></password>
+      <password></password> -->
+      
+      
+      <jndi-name>SPICSwoundDatasource</jndi-name>
+	  <connection-url>jdbc:postgresql://localhost:5432/spics?useUnicode=true&amp;characterEncoding=UTF-8</connection-url>
+	  <driver-class>org.postgresql.Driver</driver-class>
+	  <user-name>postgres</user-name>
+	  <password>postgres</password>
+	 
 <!-- 
       <exception-sorter-class-name>
          org.jboss.resource.adapter.jdbc.vendor.MySQLExceptionSorter

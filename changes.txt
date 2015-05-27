@@ -1,8 +1,18 @@
 changes:
 
+##Bugs
 1. ParticipationManagerBean:52 -> changed scope to Page for @DataModel annotation
 
 2. message_en.properties, message_de.properties -> added new property nopatients6.info
 viewPatients.xhtml:40 -> changed message key to #{messages['nopatients6.info']}
 
 3. UserDAO:78 -> changed query
+
+##Adaptive Maintenance
+1. Replace Data Source with Postgres:
+- Download Mysql Connector (https://dev.mysql.com/downloads/file.php?id=13598) and copy the jar file to [JBOSS_HOME]/server/default/lib.
+- changed data source in /spics/resources/SPICSwound-dev-ds.xml:22 to Postgres-Server with required credentials.
+- changed Hibernate dialect to PostgreSqlDialect in /spics/resources/META-INF/persistence-dev.xml:13
+- startup Postgres and create a table `spics`, credentials should match the configuration before (user:postgres/password:postgres)
+
+	
