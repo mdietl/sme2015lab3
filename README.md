@@ -20,7 +20,7 @@ The search for users (menu item "Administration") is defective. With the provide
 While running some tests a strange error occured: when documenting wound healing ("Wundheilung") with a single documentation sheet (menu item "Blätter definieren") the upwards arrow is visible the arrow is not visible in the "WHAT Studie". Find the cause of this error and correct it. (Hint: it does not have to be a programming error.)
 
 ## Adaptive Maintenance 
-**Replace the currently used database with a MySQL or Postgres database. Document all necessary steps. (Martin)** 
+**Replace the currently used database with a MySQL or Postgres database. Document all necessary steps. (Martin done)** 
 
 **Additional task for groups of three**
 
@@ -31,7 +31,7 @@ Document all necessary steps and changes you have made.
 **Preventive Maintenance**
 With the current build system all dependencies have to be managed manually. This could lead to problems when upgrading new versions. The standard for dependency management in java is the freely available Apache Maven project.
 
-Use maven to manage the dependencies and change the ant-build-script so that it uses the libs from the maven repository. The build system should not be changed. (Hint: you could use the ant-maven-plugin. As spics.jsf.jar is available in the official maven repositories you have to add it to your local repository.) (Peter)
+Use maven to manage the dependencies and change the ant-build-script so that it uses the libs from the maven repository. The build system should not be changed. (Hint: you could use the ant-maven-plugin. As spics.jsf.jar is available in the official maven repositories you have to add it to your local repository.) **(Peter)**
 
 **Perfectioning Maintenance**
 At the moment the data export is implemented in a very inefficient way which leads to the problem that the JVM is running out of memory when exporting large amounts of data. As a result of that the system is getting unstable and will eventually crash. Design a solution to prevent this problem and implement your solution.
