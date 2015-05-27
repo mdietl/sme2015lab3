@@ -13,6 +13,6 @@ viewPatients.xhtml:40 -> changed message key to #{messages['nopatients6.info']}
 - Download Mysql Connector (https://dev.mysql.com/downloads/file.php?id=13598) and copy the jar file to [JBOSS_HOME]/server/default/lib.
 - changed data source in /spics/resources/SPICSwound-dev-ds.xml:22 to Postgres-Server with required credentials.
 - changed Hibernate dialect to PostgreSqlDialect in /spics/resources/META-INF/persistence-dev.xml:13
-- startup Postgres and create a table `spics`, credentials should match the configuration before (user:postgres/password:postgres)
+- startup Postgres and create a database `spics`, credentials should match the configuration before (user:postgres/password:postgres)
 
 	
