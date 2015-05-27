@@ -22,16 +22,16 @@ While running some tests a strange error occured: when documenting wound healing
 ## Adaptive Maintenance 
 **Replace the currently used database with a MySQL or Postgres database. Document all necessary steps. (Martin done)** 
 
-**Additional task for groups of three**
+**Additional task for groups of three (Christian)**
 
 At the moment SPICS is currently running only on a JBoss server. In meetings with the customer the customer complaint about that fact and stated that he wanted us to support mulitple application servers. Concretely they want us to support Glassfish. Evaluate the porting to Glassfish and make a cost estimation. (Bonus points will be awarded for providing an implementation.)
 
 Document all necessary steps and changes you have made.
 
-**Preventive Maintenance**
+**Preventive Maintenance (Peter)**
 With the current build system all dependencies have to be managed manually. This could lead to problems when upgrading new versions. The standard for dependency management in java is the freely available Apache Maven project.
 
-Use maven to manage the dependencies and change the ant-build-script so that it uses the libs from the maven repository. The build system should not be changed. (Hint: you could use the ant-maven-plugin. As spics.jsf.jar is available in the official maven repositories you have to add it to your local repository.) **(Peter)**
+Use maven to manage the dependencies and change the ant-build-script so that it uses the libs from the maven repository. The build system should not be changed. (Hint: you could use the ant-maven-plugin. As spics.jsf.jar is available in the official maven repositories you have to add it to your local repository.) 
 
 **Perfectioning Maintenance**
 At the moment the data export is implemented in a very inefficient way which leads to the problem that the JVM is running out of memory when exporting large amounts of data. As a result of that the system is getting unstable and will eventually crash. Design a solution to prevent this problem and implement your solution.
