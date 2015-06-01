@@ -37,7 +37,6 @@ import util.plugin.IPluginRegistry;
 import util.xml.IXMLImportExport;
 import util.xml.XMLImportExport;
 import util.xml.XmlImportExportException;
-import db.impl.ValueDAO.TrialDataValuesRelation;
 import db.interfaces.ITrialDataDAO;
 import db.interfaces.ITrialFormDAO;
 import db.interfaces.IValueDAO;
