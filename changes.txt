@@ -8,6 +8,8 @@ viewPatients.xhtml:40 -> changed message key to #{messages['nopatients6.info']}
 
 3. UserDAO:78 -> changed query
 
+4. TestData was corrupt -> Changed /spics/src/action/bean/TestDataGeneratorBean.java:163 to form.setSort(0); since it is the first element. Setting it to one causes problems with Collection.sort(…) in /spics/src/action/bean/TrialFormsViewerBean.java:109
+
 ##Adaptive Maintenance
 1. Replace Data Source with Postgres:
 - Download Mysql Connector (https://dev.mysql.com/downloads/file.php?id=13598) and copy the jar file to [JBOSS_HOME]/server/default/lib.

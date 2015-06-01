@@ -160,7 +160,7 @@ public class TestDataGeneratorBean implements TestDataGenerator {
 		TrialForm form = new TrialForm();
 
 		LinkedList<AttributeGroup> atGroups = new LinkedList<AttributeGroup>();
-		form.setSort(1);
+		form.setSort(0);
 		form.setAttributeGroups(atGroups);
 		form.setName("Teststudienblatt");
 		form
