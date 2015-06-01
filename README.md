@@ -22,7 +22,7 @@ While running some tests a strange error occured: when documenting wound healing
 ## Adaptive Maintenance 
 **Replace the currently used database with a MySQL or Postgres database. Document all necessary steps. (Martin done)** 
 
-**Additional task for groups of three (Christian)**
+**Additional task for groups of three (Christian & Peter)**
 
 At the moment SPICS is currently running only on a JBoss server. In meetings with the customer the customer complaint about that fact and stated that he wanted us to support mulitple application servers. Concretely they want us to support Glassfish. Evaluate the porting to Glassfish and make a cost estimation. (Bonus points will be awarded for providing an implementation.)
 
