@@ -15,14 +15,14 @@ The customer complained about following error, when creating new documents and t
 
 The search for users (menu item "Administration") is defective. With the provided test data a search for "mus" leads to no results. Instead the user "Dr. Muster" should be found. Correct this defect and make sure that the fileds "Name" and "Anzeigename" are searched case-insensitive.
 
-**Bug report 4 (Martin)**
+**Bug report 4 (Martin done)**
 
 While running some tests a strange error occured: when documenting wound healing ("Wundheilung") with a single documentation sheet (menu item "Blätter definieren") the upwards arrow is visible the arrow is not visible in the "WHAT Studie". Find the cause of this error and correct it. (Hint: it does not have to be a programming error.)
 
 ## Adaptive Maintenance 
 **Replace the currently used database with a MySQL or Postgres database. Document all necessary steps. (Martin done)** 
 
-**Additional task for groups of three (Christian)**
+**Additional task for groups of three (Christian & Peter)**
 
 At the moment SPICS is currently running only on a JBoss server. In meetings with the customer the customer complaint about that fact and stated that he wanted us to support mulitple application servers. Concretely they want us to support Glassfish. Evaluate the porting to Glassfish and make a cost estimation. (Bonus points will be awarded for providing an implementation.)
 

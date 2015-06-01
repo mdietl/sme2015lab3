@@ -1,8 +1,6 @@
 package bean;
 
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
+import java.io.File;
 import java.sql.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -192,6 +190,8 @@ public class ViewImportExportBean implements ViewImportExport {
 
 		FullTrialDataExport ftde = new FullTrialDataExport(trial, user == null);
 		List<TrialData> toExport;
+		
+		// generate filename of file to export the data into
 		String filename = "";
 		if(user == null) {
 			Identity.instance().checkPermission(trial, SpicsPermissions.TRIAL_DATA_FULL_EXPORT);
@@ -202,36 +202,58 @@ public class ViewImportExportBean implements ViewImportExport {
 			filename = user.getUsername() + "_export.csv";
 		}
 		
-		String[][] result = ftde.export(toExport);
+		// TODO how to make path configurable?
+		File exportedFile = new File(System.getProperty("jboss.server.temp.dir"), filename);
+		
+		for (int i = 0; i < 20; i++) {
+			toExport.addAll(toExport);
+		}
+		
+		// write data to export file
+		ftde.exportAsCSV(exportedFile, toExport);
 		
 		HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
-		// file should be downloaded without display
-		response.setContentType("application/x-download");
-		response.setHeader("Content-disposition","attachement; filename=\""+ filename + "\"");
-		//response.setContentLength((new Long(srcdoc.length())).intValue());
-		
-		PrintWriter writer;
-		try {
-			
-			writer = new PrintWriter(new OutputStreamWriter(response.getOutputStream(), "ISO-8859-1"));
-			// XXX this is a hardcore hack and should be streamwritten! 
-			for(int i = 0; i < result.length; i++) {
-				StringBuffer line = new StringBuffer();
-				for(int j = 0; j < result[i].length; j++) {
-					line.append(result[i][j] == null ? "" : result[i][j]);
-					line.append(';');
+		response.setHeader("Content-disposition","attachement; filename=\"" + exportedFile.getName() + "\"");
+		response.setContentLength(new Long(exportedFile.length()).intValue());
+		response.setContentType("text/csv");
+		response.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
+		response.setHeader("Location", "http://www.google.com/");
+		/*
+		// write binary data to servlet response output stream
+        InputStream in = null;   
+        ServletOutputStream sosStream = null;   
+        try {  
+            in = new FileInputStream(exportedFile);  
+            sosStream = response.getOutputStream();   
+            int ibit = 256;   
+            while ((ibit) >= 0){   
+                ibit = in.read();   
+                sosStream.write(ibit);   
+            }  
+            sosStream.flush();  
+            sosStream.close();  
+      
+            FacesContext.getCurrentInstance().responseComplete();
+        } catch (IOException exp){   
+        	exp.printStackTrace();
+        } finally {
+        	if (in != null) {
+        		try {
+					in.close();
+				} catch (IOException e) {
+					e.printStackTrace();
 				}
-				writer.append(line.toString()).append('\r').append('\n');
-			}
-			
-			writer.flush();
-			writer.close();
-			
-			FacesContext.getCurrentInstance().responseComplete();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+        	}
+           	if (sosStream != null) {
+           		try {
+					sosStream.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+        	}
+           	exportedFile.delete();
+        }*/
+		FacesContext.getCurrentInstance().responseComplete();
 	}
 
 	@Remove

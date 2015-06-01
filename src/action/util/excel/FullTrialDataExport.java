@@ -1,5 +1,8 @@
 package util.excel;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -82,6 +85,12 @@ public class FullTrialDataExport {
 		return result;
 	}
 	
+	/**
+	 * Inefficient because the whole data is serialized into memory.
+	 * @param trialDatas
+	 * @return
+	 */
+	@Deprecated
 	public String[][] export(List<TrialData> trialDatas) {
 		String[][] result = new String[trialDatas.size()+1][headers.size()];		
 		headers.toArray(result[0]);
@@ -95,11 +104,93 @@ public class FullTrialDataExport {
 		return result;
 	}
 	
+	/**
+	 * More efficient CSV data export as the data is directly written line-wise to a temporary file instead of serializing it into memory.
+	 * @param exportedFile The target destination of the file to write the data to.
+	 * @param trialDatas The data to export as CSV.
+	 */
+	public void exportAsCSV(File exportedFile, List<TrialData> trialDatas) {
+		FileWriter writer = null;
+		try {
+			writer = new FileWriter(exportedFile);
+			for (String header : headers) {
+				writer.write(header);
+				writer.write(";");
+			}
+			writer.write("\n");
+			for (TrialData td : trialDatas) {
+				buildIntro(writer, td);
+				buildTrialData(writer, td);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			if (writer != null) {
+				try {
+					writer.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
+	private void buildIntro(FileWriter writer, TrialData td) throws IOException {
+		if(hashPatientAndUserId) {
+			writer.write(hashPatientAndUser(td.getPatient().getKennnummer(), td.getPatient().getSavedBy().getUsername()));
+		} else {
+			writer.write(td.getPatient().getKennnummer());
+			writer.write(";");
+			writer.write(td.getPatient().getSavedBy().getUsername());
+		}
+		writer.write(";");
+		writer.write(td.getTrialform().getName());
+		writer.write(";");
+		writer.write(dateTimeFormat.format(td.getSavedOn()));
+		writer.write(";");
+		writer.write(dateTimeFormat.format(td.getLastModified()));
+		writer.write(";");
+		writer.write(td.getTrialform().getArchived().toString());
+		writer.write(";");
+	}
+	
+	private void buildTrialData(FileWriter writer, TrialData td) throws IOException {
+		String stringValue = "";
+		for(Value v : td.getValues()) {
+			switch(v.getType()) {
+			case LONGSTR:
+				stringValue = removeCSVCharacters(((LongstringValue)v).getValue());
+				break;
+			case FILESET:
+				stringValue = "files_not_supported";	// TODO: solution?
+				break;
+			case DATE:
+				stringValue = dateFormat.format(((DateValue)v).getValue());
+				break;
+			case DECIMAL:
+				stringValue = numberFormat.format(((DecimalValue)v).getValue());
+				break;
+			default:
+				stringValue = v.getValueAsObject().toString();
+				break;
+			}
+			writer.write(stringValue);
+			writer.write(";");
+		}
+		int remainingColumns = headers.size() - 5 - td.getValues().size();
+		if (remainingColumns > 0) {
+			writer.write(new String(new char[remainingColumns]).replace("\0", ";"));
+		}
+		writer.write("\n");
+	}
+
+	@Deprecated
 	private void buildLine(String[] line, TrialData td) {
 		buildIntro(line, td);
 		buildTrialData(line, td);
 	}
 	
+	@Deprecated
 	private void buildTrialData(String[] line, TrialData td) {
 		String stringValue = "";
 		for(Value v : td.getValues()) {
@@ -134,6 +225,7 @@ public class FullTrialDataExport {
 		return string.replace(';', ' ').replace('\n', ' ').replace('\r', ' ');
 	}
 
+	@Deprecated
 	private void buildIntro(String[] line, TrialData td) {
 		int lineCnt = 0;
 		if(hashPatientAndUserId) {
@@ -215,7 +307,6 @@ public class FullTrialDataExport {
 
 		}
 
-	}
-	
+	}	
 
 }
