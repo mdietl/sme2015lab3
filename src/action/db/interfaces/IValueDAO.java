@@ -1,5 +1,7 @@
 package db.interfaces;
 
+import java.util.List;
+
 import javax.ejb.Local;
 
 import entities.value.Value;
@@ -17,4 +19,6 @@ public interface IValueDAO extends IGenericDAO<Value, ValueId> {
 	 * @return The value, or null if no value exists.
 	 */
 	public Value findByAttributeAndTrialData(Long attributeId, Long trialDataId);
+	
+	public List<Value> findByTrialDataList(List<Long> trialDataIds);
 }

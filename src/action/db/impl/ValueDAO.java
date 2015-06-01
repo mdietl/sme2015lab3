@@ -1,5 +1,7 @@
 package db.impl;
 
+import java.util.List;
+
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -60,5 +62,16 @@ public class ValueDAO implements IValueDAO {
 		} catch (NoResultException e) {
 			return null;
 		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Value> findByTrialDataList(List<Long> trialDataIds) {
+		
+		Query q = entityManager.createQuery("FROM Value v"
+				+ " WHERE v.id.trialDataId IN (:ids) ");
+		
+		q.setParameter("ids", trialDataIds);
+		
+		return q.getResultList();
 	}
 }
