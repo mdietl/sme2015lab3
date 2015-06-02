@@ -553,7 +553,7 @@ public class TestDataGeneratorBean implements TestDataGenerator {
 
 		// initial TD
 
-		for (int i=0; i<1000; i++) {
+		for (int i=0; i<2000; i++) {
 			TrialData trialData = new TrialData();
 			trialData.setPatient(patient);
 			trialData.setLastModified(new Date(System.currentTimeMillis()));

@@ -122,11 +122,36 @@ public class TrialDataDAO implements ITrialDataDAO {
 	}
 	
 	@SuppressWarnings("unchecked")
+	public List<TrialData> getTrialDatasForPersonalExportLimited(Long trialId, String username, int first, int max) {
+		Query q2 = entityManager.createQuery("SELECT td FROM TrialData AS td where td.patient.id in" +
+				"(select p.id from Patient p where p.export = true AND " +
+				"p.savedBy.username = :username AND p.participation.trial.id = :trial_id) ORDER BY td.id");
+		q2.setParameter("username", username);
+	    q2.setParameter("trial_id", trialId);
+		
+	    q2.setFirstResult(first);
+		q2.setMaxResults(max);
+		return q2.getResultList();
+	}
+	
+	@SuppressWarnings("unchecked")
 	public List<TrialData> getTrialDatasForFullExport(Long trialId) {
 		Query q2 = entityManager.createQuery("SELECT td FROM TrialData AS td where td.patient.id in" +
 				"(select p.id from Patient p where p.myExport = true AND " +
 				"p.participation.trial.id = :trial_id)");
 			 q2.setParameter("trial_id", trialId);
+		return q2.getResultList();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<TrialData> getTrialDatasForFullExportLimited(Long trialId, int first, int max) {
+		Query q2 = entityManager.createQuery("SELECT td FROM TrialData AS td where td.patient.id in" +
+				"(select p.id from Patient p where p.myExport = true AND " +
+				"p.participation.trial.id = :trial_id) ORDER BY td.id");
+			 q2.setParameter("trial_id", trialId);
+	
+	    q2.setFirstResult(first);
+	    q2.setMaxResults(max);
 		return q2.getResultList();
 	}
 

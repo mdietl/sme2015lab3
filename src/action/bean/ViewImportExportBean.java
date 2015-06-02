@@ -3,6 +3,7 @@ package bean;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -54,6 +55,8 @@ import entities.value.Value;
 public class ViewImportExportBean implements ViewImportExport {
 
 	private static final long serialVersionUID = 1L;
+	
+	private static final int NUM_SETS_PER_ITERATION = 1000;
 
 	@Logger
 	private Log log;
@@ -201,51 +204,75 @@ public class ViewImportExportBean implements ViewImportExport {
 		String filename = "";
 		if(user == null) {
 			Identity.instance().checkPermission(trial, SpicsPermissions.TRIAL_DATA_FULL_EXPORT);
-			toExport = trialDataDAO.getTrialDatasForFullExport(trial.getId());
+			//toExport = trialDataDAO.getTrialDatasForFullExport(trial.getId());
 			filename = "fullexport.csv";
 		} else {
-			toExport = trialDataDAO.getTrialDatasForPersonalExport(trial.getId(), user.getUsername());
+			//toExport = trialDataDAO.getTrialDatasForPersonalExport(trial.getId(), user.getUsername());
 			filename = user.getUsername() + "_export.csv";
 		}
-		
-		//provide pre-fetched trial data values
-		List<Long> ids = new ArrayList<Long>();
-		for (TrialData td : toExport) {
-			ids.add(td.getId());
-		}
-		List<Value> values = valueDAO.findByTrialDataList(ids);
-		
-		//String[][] result = ftde.export(toExport);
-		String[][] result = ftde.export(toExport, values);
-		
+
 		HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
 		// file should be downloaded without display
 		response.setContentType("application/x-download");
 		response.setHeader("Content-disposition","attachement; filename=\""+ filename + "\"");
-		//response.setContentLength((new Long(srcdoc.length())).intValue());
-		
-		PrintWriter writer;
+		PrintWriter writer = null;
 		try {
-			
 			writer = new PrintWriter(new OutputStreamWriter(response.getOutputStream(), "ISO-8859-1"));
-			// XXX this is a hardcore hack and should be streamwritten! 
-			for(int i = 0; i < result.length; i++) {
-				StringBuffer line = new StringBuffer();
-				for(int j = 0; j < result[i].length; j++) {
-					line.append(result[i][j] == null ? "" : result[i][j]);
-					line.append(';');
-				}
-				writer.append(line.toString()).append('\r').append('\n');
-			}
-			
-			writer.flush();
-			writer.close();
-			
-			FacesContext.getCurrentInstance().responseComplete();
-		} catch (IOException e) {
+		} catch (UnsupportedEncodingException e1) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
+		
+		Boolean completed = false;
+		int counter = 0;
+		
+		while (!completed) {
+						
+			if (user == null)
+				toExport = trialDataDAO.getTrialDatasForFullExportLimited(trial.getId(), 
+						counter*NUM_SETS_PER_ITERATION, NUM_SETS_PER_ITERATION);
+			else 
+				toExport = trialDataDAO.getTrialDatasForPersonalExportLimited(trial.getId(), 
+						user.getUsername(), counter*NUM_SETS_PER_ITERATION, NUM_SETS_PER_ITERATION);
+			
+			if (!toExport.isEmpty()) {
+			
+				//provide pre-fetched trial data values
+				List<Long> ids = new ArrayList<Long>();
+				for (TrialData td : toExport) {
+					ids.add(td.getId());
+				}
+				List<Value> values = valueDAO.findByTrialDataList(ids);
+				
+				//String[][] result = ftde.export(toExport);
+				String[][] result = ftde.export(toExport, values);
+				
+				//response.setContentLength((new Long(srcdoc.length())).intValue());
+	
+									
+				//ignore table header if first call
+				for(int i = counter > 0 ? 1 : 0; i < result.length; i++) {
+					StringBuffer line = new StringBuffer();
+					for(int j = 0; j < result[i].length; j++) {
+						line.append(result[i][j] == null ? "" : result[i][j]);
+						line.append(';');
+					}
+					writer.append(line.toString()).append('\r').append('\n');
+				}
+				
+				counter++;
+			}
+			else
+				completed = true;						
+	
+		}
+		writer.flush();
+		writer.close();
+		
+		FacesContext.getCurrentInstance().responseComplete();
 	}
 
 	@Remove
