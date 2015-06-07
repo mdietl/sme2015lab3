@@ -6,3 +6,7 @@ Zum hinfzuegen der libraries einfach in lib ordner gehen und folgende befehle au
 	
 2. gnujaxp in locales maven repo hinzufügen
 	mvn install:install-file -Dfile=gnujaxp.jar -DgroupId=gnujaxp -DartifactId=gnujaxp -Dversion=1.0.0 -Dpackaging=jar
+
+
+damit die maven dependencies verwendet werden können muss auch noch das maven-ant-task plugin für ant installiert werden
+http://maven.apache.org/ant-tasks/installation.html
