@@ -1,6 +1,9 @@
 <?xml version="1.0"?>
 
-<project name="SPICSwound" default="deploy" basedir=".">
+<project name="SPICSwound" default="deploy" basedir="." xmlns:artifact="antlib:org.apache.maven.artifact.ant">
+	<!-- loading dependencies from pomfile -->
+	<artifact:pom id="pomXML" file="pom.xml" />
+	<artifact:dependencies filesetId="mvn-dependencies" pomRefId="pomXML" versionsId="dependency.versions"/>
 
 	<!-- Give user a chance to override without editing this file or typing -D -->
 	<property file="${basedir}/build.properties" />
@@ -23,7 +26,7 @@
 	<property name="war.dir" value="exploded-archives/${project.name}.war" />
 	<property name="test.results" value="testresults" />
 	<property name="custom.jsf.dir" value="exploded-archives/customjsf" />
-	<property name="custom.jsf.jar" value="spics.jsf.jar" />
+	<property name="custom.jsf.jar" value="spics-jsf.jar" />
 	<property name="test.dir" value="test-build" />
 	<property name="bootstrap.dir" value="${basedir}/bootstrap" />
 	<property name="deploy.dir" value="${jboss.home}/server/default/deploy" />
@@ -60,6 +63,11 @@
 		<mkdir dir="${dist.dir}" />
 		<mkdir dir="${custom.jsf.dir}" />
 		<mkdir dir="${test.results}" />
+		
+		<copy todir="${lib.dir}" >
+			<fileset refid="mvn-dependencies" />
+			<mapper classname="org.apache.maven.artifact.ant.VersionMapper" from="${dependency.versions}" to="flatten" />
+		</copy>
 
 		<tstamp>
 			<format property="build.start.time" pattern="ddMMyyyyHHmm" />
