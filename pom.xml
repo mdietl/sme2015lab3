@@ -41,8 +41,6 @@
 		  <version>3.4.0.GA</version>
 		</dependency>
 		
-		<!-- jsf libs -->
-		<!--<include name="jboss-seam-ui.jar" /> -->
 		<dependency> 
 		  <groupId>org.jboss.seam</groupId> 
 		  <artifactId>jboss-seam-ui</artifactId>
@@ -94,59 +92,19 @@
 			<version>1.2</version>
 		</dependency>
 
-		
-		
-			
-		<!-- <include name="${custom.jsf.jar}" /> -->	
-		<!--spics.jsf.jar --> 
 		<dependency>
 			<groupId>tuwien.ac.at</groupId>
 			<artifactId>spics-jsf</artifactId>
 			<version>1.0.0</version>
 		</dependency>
 		
-		<!-- <include name="richfaces-ui*.jar" />
-		<include name="richfaces-api*.jar" />
-		<include name="richfaces-impl*.jar" />  -->
+
 		<dependency>  
 		  <groupId>org.richfaces.ui</groupId>  
 		  <artifactId>richfaces-ui</artifactId>  
 		  <version>3.2.2.SR1</version>  
 		</dependency>
 
-		<!-- should be added automatically becaues of transitive dependencies of richfaces.ui
-		 <dependency>  
-			<groupId>org.richfaces.framework</groupId>  
-			<artifactId>richfaces-impl</artifactId>  
-			<version>3.3.3.Final</version>  
-		</dependency>   -->
-
-
-
-
-
-
-		<!-- OLDER VERSION
-		<dependency>
-			<groupId>commons-digester</groupId>
-			<artifactId>commons-digester</artifactId>
-			<version>1.8</version>
-		</dependency> -->
-
-
-
-
-		<!-- richfaces dependency
-		<include name="commons-beanutils.jar" /> 
-		<dependency>
-			<groupId>commons-beanutils</groupId>
-			<artifactId>commons-beanutils</artifactId>
-			<version>1.6</version>
-		</dependency>-->
-
-
-		<!-- drools
-		<include name="drools-*.jar" />   -->
 		<dependency>
 			<groupId>org.drools</groupId>
 			<artifactId>drools-core </artifactId>
@@ -158,33 +116,23 @@
 			<version>4.0.3</version>
 		</dependency> 
 		
-		<!-- <include name="core.jar" /> -->
 		<dependency>
 			<groupId>org.eclipse.jdt</groupId>
 			<artifactId>core</artifactId>
 			<version>3.3.0-v_771</version>
 		</dependency>
 
-		<!--<include name="commons-el.jar" />   -->
 		<dependency>
 			<groupId>commons-el</groupId>
 			<artifactId>commons-el</artifactId>
 			<version>1.0</version>
 		</dependency> 
 
-
-	<!-- needed for myfaces 
-	<include name="jsf-facelets.jar" /> -->
 		<dependency>
 			<groupId>com.sun.facelets</groupId>
 			<artifactId>jsf-facelets</artifactId>
 			<version>1.1.14</version>
 		</dependency>
-
-
-
-	<!-- needed for excel import 
-	<include name="poi.jar" /> -->
 
 		<dependency>
 			<groupId>org.apache.poi</groupId>
@@ -192,25 +140,18 @@
 			<version>3.5-beta4</version>
 		</dependency>
 
-
-	<!-- <include name="poi-ooxml.jar" /> -->
 		<dependency>
 			<groupId>org.apache.poi</groupId>
 			<artifactId>poi-ooxml</artifactId>
 			<version>3.5-beta4</version>
 		</dependency>
 
-
-
-	<!-- <include name="ooxml-schemas.jar" /> -->
 		<dependency>
 			<groupId>org.apache.poi</groupId>
 			<artifactId>poi-ooxml-schemas</artifactId>
 			<version>3.6</version>
 		</dependency>
 
-
-	<!-- <include name="openxml4j.jar" /> --> 
 		<dependency>
 			<groupId>org.apache.poi</groupId>
 			<artifactId>openxml4j</artifactId>
@@ -218,28 +159,18 @@
 		</dependency>
 
 
-
-	<!-- <include name="jaxen.jar" />
-	<include name="xmlbeans.jar" /> -->
 		<dependency>
 			<groupId>org.apache.xmlbeans</groupId>
 			<artifactId>xmlbeans</artifactId>
 			<version>2.3.0</version>
 		</dependency>
 
-
-
-	<!-- needed for charting 
-	<include name="jcommon*.jar" /> -->
 		<dependency>
 			<groupId>org.jfree</groupId>
 			<artifactId>jcommon</artifactId>
 			<version>1.0.23</version>
 		</dependency>
 
-
-
-	<!-- <include name="jfreechart*.jar" /> -->
 		<dependency>
 			<groupId>org.jfree</groupId>
 			<artifactId>jfreechart</artifactId>
