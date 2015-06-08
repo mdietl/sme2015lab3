@@ -69,4 +69,16 @@ public class FileUtils {
     	return _instance;
     }
 
+    /**
+     * Recursively deletes all containing files and directories of a given root path.
+     * @param root The root path to delete all content from
+     */
+    public static void delete(File f) {
+    	if (f.isDirectory()) {
+    		for (File c : f.listFiles())
+				delete(c);
+    	}
+    	f.delete();
+    }
+    
 }

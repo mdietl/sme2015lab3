@@ -1,5 +1,8 @@
 package util.excel;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -96,24 +99,56 @@ public class FullTrialDataExport {
 		return result;
 	}
 	
-	public String[][] export(List<TrialData> trialDatas, List<Value> values) {
+	public String[][] export(List<TrialData> trialDatas, List<Value> values) throws IOException {
 		String[][] result = new String[trialDatas.size()+1][headers.size()];		
 		headers.toArray(result[0]);
 
 		int line = 1;
 		for(TrialData td : trialDatas) {
 			buildIntro(result[line], td);
-			buildTrialData(result[line], td, values);
+			buildTrialData(result[line], null, td, values);
 			line++;
 		}
 		
 		return result;
 	}
 	
+	/**
+	 * More efficient CSV data export as the data is directly written line-wise to a temporary file instead of serializing it into memory.
+	 * @param exportedFile The target destination of the file to write the data to.
+	 * @param trialDatas The data to export as CSV.
+	 * @throws IOException 
+	 */
+	public void exportAsCSV(File exportedFile, List<TrialData> trialDatas) throws IOException {
+		FileWriter writer = null;
+		try {
+			writer = new FileWriter(exportedFile);
+			for (String header : headers) {
+				writer.write(header);
+				writer.write(";");
+			}
+			writer.write("\n");
+			for (TrialData td : trialDatas) {
+				buildIntro(writer, td);
+				buildTrialData(null, writer, td, null);
+			}
+		} finally {
+			if (writer != null) {
+				try {
+					writer.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
+	@Deprecated
 	private void buildLine(String[] line, TrialData td) {
 		buildIntro(line, td);
 		buildTrialData(line, td);
 	}
+	
 	@Deprecated
 	private void buildTrialData(String[] line, TrialData td) {
 		String stringValue = "";
@@ -137,12 +172,14 @@ public class FullTrialDataExport {
 			}
 			line[attributeOffsets.get(v.getAttribute().getId())] = stringValue;
 		}
-
 	}
 	
-	private void buildTrialData(String[] line, TrialData td, List<Value> values) {
+	private void buildTrialData(String[] line, FileWriter writer, TrialData td, List<Value> values) throws IOException {
+		if (line == null && writer == null) {
+			throw new IllegalArgumentException("Either line or writer argument must be not null");
+		}
 		String stringValue = "";
-		for(Value v : values) {
+		for(Value v : (values == null ? td.getValues() : values)) {
 			
 			if (!v.getId().getTrialDataId().equals(td.getId()))
 				continue;
@@ -164,9 +201,20 @@ public class FullTrialDataExport {
 				stringValue = v.getValueAsObject().toString();
 				break;
 			}
-			line[attributeOffsets.get(v.getId().getAttributeId())] = stringValue;
+			if (writer == null) {
+				line[attributeOffsets.get(v.getId().getAttributeId())] = stringValue;
+			} else {
+				writer.write(stringValue);
+				writer.write(";");
+			}
 		}
-
+		if (writer != null) {
+			int remainingColumns = headers.size() - 5 - td.getValues().size();
+			if (remainingColumns > 0) {
+				writer.write(new String(new char[remainingColumns]).replace("\0", ";"));
+			}
+			writer.write("\n");
+		}
 	}
 
 	/**
@@ -191,7 +239,25 @@ public class FullTrialDataExport {
 		line[lineCnt++] = (dateTimeFormat.format(td.getLastModified())); 
 		line[lineCnt++] = (td.getTrialform().getArchived().toString());
 	}
-
+	
+	private void buildIntro(FileWriter writer, TrialData td) throws IOException {
+		if(hashPatientAndUserId) {
+			writer.write(hashPatientAndUser(td.getPatient().getKennnummer(), td.getPatient().getSavedBy().getUsername()));
+		} else {
+			writer.write(td.getPatient().getKennnummer());
+			writer.write(";");
+			writer.write(td.getPatient().getSavedBy().getUsername());
+		}
+		writer.write(";");
+		writer.write(td.getTrialform().getName());
+		writer.write(";");
+		writer.write(dateTimeFormat.format(td.getSavedOn()));
+		writer.write(";");
+		writer.write(dateTimeFormat.format(td.getLastModified()));
+		writer.write(";");
+		writer.write(td.getTrialform().getArchived().toString());
+		writer.write(";");
+	}
 
 	private String hashPatientAndUser(String kennnummer, String username) {
 		int hash = kennnummer.concat(username).hashCode();
