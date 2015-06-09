@@ -1,5 +1,6 @@
 package bean;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
@@ -16,6 +17,7 @@ import javax.ejb.Stateful;
 import javax.faces.component.UISelectItems;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.jboss.seam.ScopeType;
@@ -30,6 +32,7 @@ import org.jboss.seam.log.Log;
 import org.jboss.seam.security.Identity;
 import org.richfaces.model.UploadItem;
 
+import util.FileUtils;
 import util.JSFNavigationConstants;
 import util.SpicsPermissions;
 import util.excel.FullTrialDataExport;
@@ -189,31 +192,88 @@ public class ViewImportExportBean implements ViewImportExport {
 	}
 	
 	public void exportAllTrialData() {
-		performExport(null);
+		try {
+			performDirectExport(null);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	public void exportOwnTrialData() {
-		performExport(user);
+		try {
+			performDirectExport(user);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
-	private void performExport(User user) {
+	private void performDirectExport(User user) throws IOException {
 		Trial trial = sessionInfo.getTrial();
 
 		FullTrialDataExport ftde = new FullTrialDataExport(trial, user == null);
-		List<TrialData> toExport;
+		List<TrialData> toExport = null;
+		String filename = getFilename(trial);
+		
+		if (user == null) {
+			toExport = trialDataDAO.getTrialDatasForFullExport(trial.getId());
+		} else {
+			toExport = trialDataDAO.getTrialDatasForPersonalExport(trial.getId(), user.getUsername());
+		}
+		
+		// create necessary directory structure in the jboss www dir
+		String currentTime = System.currentTimeMillis() + "";
+		File baseDir = new File(new File(System.getProperty("jboss.server.data.dir")).getParent() + File.separator
+				+ "deploy" + File.separator + "jboss-web.deployer" + File.separator + "ROOT.war" + File.separator
+				+ "SPICSwound-csv-export" + File.separator + currentTime);
+		FileUtils.delete(baseDir.getParentFile());
+		baseDir.getParentFile().mkdir();
+		baseDir.mkdir();
+		File exportedFile = new File(baseDir.getAbsolutePath() + File.separator + filename);
+		if (!exportedFile.exists()) {
+			exportedFile.createNewFile();
+		}
+		
+		// write data to export file
+		ftde.exportAsCSV(exportedFile, toExport);
+		
+		// redirect user to exported csv file
+		HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+		String downloadURL = (request.getRequestURL().substring(0, request.getRequestURL().indexOf("/SPICSwound"))
+				+ "/SPICSwound-csv-export/" + currentTime + "/" + filename);
+		
+		HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
+		response.setContentType("text/csv");
+		response.setHeader("Content-disposition", "attachement; filename=\""+ filename + "\"");
+		response.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
+		response.setHeader("Location", downloadURL);
+		
+		FacesContext.getCurrentInstance().responseComplete();
+	}
+	
+	private String getFilename(Trial trial) {
 		String filename = "";
 		if(user == null) {
-			Identity.instance().checkPermission(trial, SpicsPermissions.TRIAL_DATA_FULL_EXPORT);		
+			Identity.instance().checkPermission(trial, SpicsPermissions.TRIAL_DATA_FULL_EXPORT);
 			filename = "fullexport.csv";
 		} else {
 			filename = user.getUsername() + "_export.csv";
 		}
+		return filename;
+	}
+	
+	private void performExport(User user) throws IOException {
+		Trial trial = sessionInfo.getTrial();
 
+		FullTrialDataExport ftde = new FullTrialDataExport(trial, user == null);
+		List<TrialData> toExport;
+		String filename = getFilename(trial);
+		
 		HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
 		// file should be downloaded without display
 		response.setContentType("application/x-download");
 		response.setHeader("Content-disposition","attachement; filename=\""+ filename + "\"");
-		
 		PrintWriter writer = null;
 		try {
 			writer = new PrintWriter(new OutputStreamWriter(response.getOutputStream(), "ISO-8859-1"));
@@ -245,9 +305,12 @@ public class ViewImportExportBean implements ViewImportExport {
 					ids.add(td.getId());
 				}
 				List<Value> values = valueDAO.findByTrialDataList(ids);
-								
+				
+				//String[][] result = ftde.export(toExport);
 				String[][] result = ftde.export(toExport, values);
 				
+				//response.setContentLength((new Long(srcdoc.length())).intValue());
+	
 									
 				//ignore table header if first call
 				for(int i = counter > 0 ? 1 : 0; i < result.length; i++) {
