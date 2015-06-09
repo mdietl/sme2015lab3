@@ -28,12 +28,12 @@ At the moment SPICS is currently running only on a JBoss server. In meetings wit
 
 Document all necessary steps and changes you have made.
 
-**Preventive Maintenance (Peter)**
+**Preventive Maintenance (Peter done)**
 With the current build system all dependencies have to be managed manually. This could lead to problems when upgrading new versions. The standard for dependency management in java is the freely available Apache Maven project.
 
 Use maven to manage the dependencies and change the ant-build-script so that it uses the libs from the maven repository. The build system should not be changed. (Hint: you could use the ant-maven-plugin. As spics.jsf.jar is available in the official maven repositories you have to add it to your local repository.) 
 
-**Perfectioning Maintenance (Martin done)**
+**Perfectioning Maintenance (Martin done, Christian done)**
 At the moment the data export is implemented in a very inefficient way which leads to the problem that the JVM is running out of memory when exporting large amounts of data. As a result of that the system is getting unstable and will eventually crash. Design a solution to prevent this problem and implement your solution.
 
 Document all necessary steps and changes you have made. Don't forget to measure your improvements and compare them to the measurement results before the improvements.
