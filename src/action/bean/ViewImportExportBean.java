@@ -203,11 +203,9 @@ public class ViewImportExportBean implements ViewImportExport {
 		List<TrialData> toExport;
 		String filename = "";
 		if(user == null) {
-			Identity.instance().checkPermission(trial, SpicsPermissions.TRIAL_DATA_FULL_EXPORT);
-			//toExport = trialDataDAO.getTrialDatasForFullExport(trial.getId());
+			Identity.instance().checkPermission(trial, SpicsPermissions.TRIAL_DATA_FULL_EXPORT);		
 			filename = "fullexport.csv";
 		} else {
-			//toExport = trialDataDAO.getTrialDatasForPersonalExport(trial.getId(), user.getUsername());
 			filename = user.getUsername() + "_export.csv";
 		}
 
@@ -215,6 +213,7 @@ public class ViewImportExportBean implements ViewImportExport {
 		// file should be downloaded without display
 		response.setContentType("application/x-download");
 		response.setHeader("Content-disposition","attachement; filename=\""+ filename + "\"");
+		
 		PrintWriter writer = null;
 		try {
 			writer = new PrintWriter(new OutputStreamWriter(response.getOutputStream(), "ISO-8859-1"));
@@ -246,12 +245,9 @@ public class ViewImportExportBean implements ViewImportExport {
 					ids.add(td.getId());
 				}
 				List<Value> values = valueDAO.findByTrialDataList(ids);
-				
-				//String[][] result = ftde.export(toExport);
+								
 				String[][] result = ftde.export(toExport, values);
 				
-				//response.setContentLength((new Long(srcdoc.length())).intValue());
-	
 									
 				//ignore table header if first call
 				for(int i = counter > 0 ? 1 : 0; i < result.length; i++) {
