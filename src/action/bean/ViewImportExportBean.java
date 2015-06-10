@@ -193,7 +193,7 @@ public class ViewImportExportBean implements ViewImportExport {
 	
 	public void exportAllTrialData() {
 		try {
-			performDirectExport(null);
+			performExport(null);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -202,7 +202,7 @@ public class ViewImportExportBean implements ViewImportExport {
 	
 	public void exportOwnTrialData() {
 		try {
-			performDirectExport(user);
+			performExport(user);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
